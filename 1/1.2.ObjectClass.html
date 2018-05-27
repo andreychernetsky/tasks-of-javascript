@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="files/android-icon-48x48.png" type="image/png">
+    <title>Title</title>
+</head>
+<body>
+
+<a href="http://htmllab.ru/zadachi-po-javascript/">Задачи по javascript</a>
+
+<script>
+    function clog(item) {
+        console.log(item);
+    }
+    function ilog(item) {
+        console.info(item);
+    }
+    function dlog(item) { //выводит элемент в виде, удобном для исследования HTML-структуры
+        console.dir(item);
+    }
+
+    //значение по умоланию
+    var sum = function(a, b) {
+        a = a || 10;
+        b = b || 20;
+        clog(a + b);
+    };
+    sum(1, 2); // 3
+    sum(1);    // 21
+    sum();     // 30
+    sum(0, 0);     // 30
+    sum(0, 5);     // 15
+
+    var sum1 = function(a, b) { //предпочтительный
+        // Принимаются все переданные значения
+        a = (0 in arguments) ? a : 10;
+        b = (1 in arguments) ? b : 20;
+        clog(a + b);
+    };
+    sum1(0, 5); // 5
+    sum1(undefined, 40); // NaN
+    sum1(40, undefined); // NaN
+    sum1(40, null); // NaN
+    sum1(0, 0); // 0
+    sum1(); // 30
+
+    //убрать лишнее из массива
+    var arr60 = ['', 1, 'str 1', 0, false, 'str 2', null];
+    clog(arr60.filter(Boolean)); // [1, 'str1', 'str 2'];
+    clog(arr60.filter(function(item) {
+        return !!item;
+    })); //[1, "str 1", "str 2"]
+
+    //клонировать обьект
+    var original = {
+        a: 1,
+        b: true,
+        d: false,
+        e: 'string in object',
+        f: {
+            g: [2, 3, 4, 5, 6]
+        },
+        h: null
+    };
+    // Объект cloned содержит все свойства объекта original
+    var cloned = (JSON.parse(JSON.stringify(original))); //только для простых обьектов без функций
+    function clone(obj) {
+        if(obj === null || typeof(obj) !== 'object' || 'isActiveClone' in obj)
+            return obj;
+        var temp = obj.constructor(); // changed
+        for(var key in obj) {
+            if(Object.prototype.hasOwnProperty.call(obj, key)) {
+                obj['isActiveClone'] = null;
+                temp[key] = clone(obj[key]);
+                delete obj['isActiveClone'];
+            }
+        }
+        return temp;
+    }
+    
+
+    //Выведите каждый элемент этого объекта на экран с помощью функции alert.
+    var obj1 = {text:'текст!', 1:'125', key:'element'};
+    var j = '';
+    for (var i in obj1) {
+        j += i + ', ';
+    }
+    clog(j); //1, text, key,
+
+    //Выведите на экран зарплату Пети и Коли.
+    var obj2 = {'Коля':'1000', 'Вася':'500', 'Петя':'200'};
+    var count = '';
+    for (var q in obj2) {
+        if (q == 'Петя' || q == 'Коля') {
+            count += q + ': ' + obj2[q] + ', ';
+        }
+    }
+    var litera = count.trim();
+    clog(litera.substr(0, litera.length - 1)); //Коля: 1000, Петя: 200
+
+    // Создайте ассоциативный массив дней недели. Ключами в нем должны служить номера дней от начала
+    //недели (понедельник - первый и т.д.). Выведите на экран текущий день недели.
+    var objDay = { 1: "Понедельник", 2: "Вторник", 3: "Среда", 4: "Четверг", 5: "Пятница", 6: "Суббота", 0: "Воскресенье" };
+    for (var w in objDay) {
+        if (new Date().getDay() == w) {
+            clog(objDay[w]); //Воскресенье
+        }
+    }
+
+    //Создайте объект obj с ключами 'I', 'study', 'javascript', 'sign' и соответствующими элементами
+    //'Я', 'учу', 'javascript', '!'. С его помощью выведите на экран фразу 'Я учу JavaScript!'.
+    var objIStudy = { 'I': "Я", 'study': "учу", 'javascript': "JavaScript", 'sign': "!" };
+    var wordsStudy = '';
+    for (var e in objIStudy) {
+        if (!objIStudy.hasOwnProperty(e)) continue; // пропустить "не свои" свойства
+        (e != 'javascript') ? wordsStudy += objIStudy[e] + ' ' : wordsStudy += objIStudy[e];
+    }
+    var wordsJS = wordsStudy.trim();
+    clog(wordsJS); //Я учу JavaScript!
+
+    //вывести jQuery
+    var frame = { js:['jQuery', 'Angular'], php: 'hello', css: 'world' };
+    clog(frame.js[0]); //jQuery
+
+    //Создайте объект city1 (var city1 = {}), укажите у него свойства name (название города) и
+    //population (населенность города). Выведите свойства, обратившись к ним напрямую
+    var city1 = {};
+    city1.name = "Alessa Gelespi";
+    city1.population = "Silent Hill";
+    clog(city1.name + ' from ' + city1.population);
+
+    //Создайте объект city2 через нотацию {name: "...", population: "..."}, заполните другими
+    //значениями и выведите их.
+    var city2 = {
+        "name": "Kitty",
+        "population": "China TV"
+    };
+    clog(city2.name + ' from ' + city2.population);
+
+    //Создайте методы show() у каждого из объектов. Этот метод должен выводить информацию о городе.
+    //Примечание: можно обращаться к каждому свойству через цикл for/in.
+    function Show() {
+        this.city = "New York"
+    }
+    var city = new Show();
+    clog(city.city);
+
+    //Создайте глобальную функцию getObj(), которая возвращает this. А у каждого из объектов city1
+    //или city2 метод getCity, который ссылается на getObj. Вызовите этот метод. Примечание:
+    //к объекту вызова можно обратиться через this.
+    function getObj() {
+        return this;
+    }
+    var city1 = { "getCity": this.getObj() };
+    var city2 = { "getCity": this.getObj() };
+    clog(city1.getCity); //window
+    clog(city2.getCity); //window
+
+    //(*) Создать объект obj, с методами method1() и method2(). В каждом методе должна выводиться
+    //строка «метод1» и «метод2» соответственно. Сделайте так, чтобы было возможно выполнение кода
+    //obj.method1().method2().
+    var obj3 = {
+        "met": '',
+        "method1": function () {
+            this.met += "метод1 ";
+            return this;
+        },
+        "method2": function () {
+            this.met += "метод1 ";
+            return this;
+        }
+    };
+    clog(obj3.method1().method2().met);
+
+    //посчитать, сколько в объекте status
+    var obj4 = {
+        0: {
+            a: 1,
+            status: 2
+        },
+        1: {
+            b: 1,
+            status: 0
+        },
+        2: {
+            c: 1,
+            status: 1
+        }
+    };
+    function countObjStatur(obj) {
+        let r, count = 0;
+        for (r in obj) {
+            count += obj[r].status;
+        }
+        return count;
+    }
+    clog(countObjStatur(obj4)); //3
+
+    //вывести обькт в одну колонку
+    var fruits = {
+        'apple': {
+            'color': 'green',
+            'sort': 'Granny Smith',
+            'Country': 'Russia',
+            'price': 68
+        },
+        'orange': {
+            'color': 'orange',
+            'sort': 'Valencia',
+            'country': 'Spain',
+            'price': 100.99
+        },
+        'pear': {
+            'color': 'red',
+            'sort': 'Conference',
+            'country': 'Cyprus',
+            'price': 120.59
+        },
+        'netto' : 125600 // всего килограммов фруктов -- вводим свойство-НЕобъект
+    };
+    function allObjToOne(obj) {
+        let i, j, all = '';
+        for (i in obj) {
+            if (typeof obj[i] == 'object') {
+                for (j in obj[i]) {
+                    all += i + ": " + j + " = " + obj[i][j] + '\r\n';
+                }
+            } else {
+                all += i + ": " + obj[i];
+            }
+        }
+        return all;
+    }
+    clog(allObjToOne(fruits));
+
+    var allbustProps = '';
+    function bustProps (obj, txt) { //более универсальное решение через замыкания
+        for (var key in obj) {
+            if (typeof obj [key] == 'object') { //если в обьекте вложен обьект
+                bustProps (obj [key], (txt ? ' : ' : '') + key); //передаем его через замыкания
+            } else {
+                allbustProps += ((txt ? (txt + ' : ') : '') + key + ' = ' + obj [key] + '\r\n'); //добавляем в строку все из обьекта
+            }
+        }
+        return allbustProps;
+    }
+    clog(bustProps (fruits, ''));
+
+    //чтобы при переборе обьекта ключи не сортировались, а выполнялись по порядку
+    //сделать все ключи нечисловыми, например, добавим в начало дополнительный символ +
+    function readObj() {
+        let all = '';
+        var cod = {
+            "+7": "Россия",
+            "+38": "Украина",
+            "+1": "США"
+        };
+        for (var code in cod) {
+            var value = cod[code];
+            code = +code; // ..если нам нужно именно число, преобразуем: "+7" ‐> 7
+            all += code + ": " + value + "\r\n"; // 7, 38, 1 во всех браузерах
+        }
+        return all;
+    }
+    clog(readObj());
+
+    function menu() {
+        var menu = {
+            width: 200,
+            height: 300,
+            title: "My menu"
+        };
+        function isNumeric(n) { //проверяет на число
+            return !isNaN(parseFloat(n)) && isFinite(n);
+        }
+        function multiplyNumeric(obj) {
+            for (var key in obj) {
+                if (isNumeric(obj[key])) { //если обьект передает число, а не строку
+                    obj[key] *= 2; //умножаем значение на 2
+                }
+            }
+        }
+        multiplyNumeric(menu);
+        ilog("menu width=" + menu.width + "\r\nheight=" + menu.height + "\r\ntitle=" + menu.title); //menu width=400 height=600 title=My menu
+    }
+    menu();
+
+
+
+
+
+
+    //Безопасное получение свойств вложенных объектов
+    function getProperty(obj, prop) { //если в цепочке не будет указанного объекта, то будет выброшено исключение, a так нет.
+        return prop.split('.')
+            .reduce(function (m, i) {
+                return m && typeof m == 'object' ? m[i] : null;
+            }, obj);
+    }
+    var objProperty = {a: {b: {c: 42} } };
+    getProperty(objProperty, 'a.x.y'); //null
+
+
+    //Напишите функцию printList(list) при помощи рекурсии и без.
+    function  printListRec(list) { //рекурсивно
+        let obj = [];
+        (function count(item) {
+            for (let i in item) {
+                (i == 'value') ? obj.push(item[i]) : count(item[i]);
+            }
+        })(list);
+        return obj;
+    }
+    function printListRecLess(list) { //рекурсивно
+        let all = [];
+        (function count(item) {
+            all.push( item.value );
+            (item.next) ? count(item.next) : clog (all);
+        })(list)
+    }
+    function printList(list) { //без явной рекурсии (рекурсивный while)
+        let all = [];
+        while(list) {
+            all.push( list.value );
+            list = list.next;
+        }
+        clog(all);
+    }
+    var listPrint = {
+        value: 1,
+        next: {
+            value: 2,
+            next: {
+                value: 3,
+                next: {
+                    value: 4,
+                    next: null
+                }
+            }
+        }
+    };
+    clog(printListRec(listPrint)); //[1, 2, 3, 4]
+    printListRecLess(listPrint); //[1, 2, 3, 4]
+    printList(listPrint); //[1, 2, 3, 4]
+
+    //len = Object.keys(obj).length; //длинна обьекта
+
+</script>
+</body>
+</html>

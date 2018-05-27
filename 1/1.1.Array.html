@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Задачи на массивы</title>
+</head>
+<body>
+
+<a href="http://www.itmathrepetitor.ru/prog/zadachi-na-massivy-2/">Задачи на массивы</a>
+
+<script>
+    function clog(item) {
+        console.log(item);
+    }
+    function ilog(item) {
+        console.info(item);
+    }
+    function dlog(item) { //выводит элемент в виде, удобном для исследования HTML-структуры
+        console.dir(item);
+    }
+
+    //Создать независимую копию JavaScript массива
+    function dubleCopyArr() {
+        var oldArray = ["a", "b", "c"];
+        var newArray = oldArray.slice();
+        return newArray;
+    }
+    //сколько функция принимает аргументов
+    function countArg(a,b,c,d) {
+        var args = Array.prototype.slice.call(arguments); //arguments превратить в настоящий массив нужно сделать его независимую копию
+        return args;
+    }
+/*
+    //call, apply
+    function juggle() {
+        var result = 0;
+        //arguments.length принимает любое количество входных данных в функцию
+        for (var n = 0; n < arguments.length; n++) {
+            result += arguments[n];
+        }
+        this.result = result; //вместо return стоит this для обьектов
+    }
+    var ninja1 = {};
+    var ninja2 = {};
+    juggle.apply(ninja1, [1,2,3,4]); //массив данных
+    juggle.call(ninja2, 1,2,3,4); //список данных
+    clog(ninja1.result); //10
+    clog(ninja2.result); //10
+
+    //forEach() выполняет функцию callback один раз для каждого элемента callback(item, i, arr)
+    var arr1 = ["Яблоко", "Апельсин", "Груша"];
+    arr1.forEach(function(item, i, arr) {
+        ilog( i + ": " + item + " (массив:" + arr + ")" );
+        //0: Яблоко (массив:Яблоко,Апельсин,Груша)
+        //1: Апельсин (массив:Яблоко,Апельсин,Груша)
+        //2: Груша (массив:Яблоко,Апельсин,Груша)
+    });
+
+
+    var addArr1 = [12, 16, 17, 18, 19];
+    var arr2 = [12, 16, 17, 18, 19];
+    var countMap = addArr1.map(function(count) { //применит функцию для обработки каждого эл масс
+        return count + 10;
+    });
+    clog(countMap); //[12, 16, 17, 18, 19, 22, 32, 54, 92, 108, 109, "end Arr10"]
+
+    var summ3 = arr2.reduce(function (a, b) { //для последовательной обработки каждого элемента массива с сохранением промежуточного результата.
+        return a + b;
+    }, 0); //0 значение для первого запуска т.е. 0+12 12+2...
+    clog(summ3);
+
+
+
+    //join() пре­об­ра­зу­ет все эле­мен­ты мас­си­ва в  стро­ки, объ­еди­ня­ет их и воз­вра­ща­ет по­лу­чив­шую­ся стро­ку
+    console.log(a.join()); //1,2,3
+    console.log(a.join(" ")); //1 2 3
+    console.log(a.join("-")); //1-2-3
+    //reverse() ме­ня­ет по­ря­док сле­до­ва­ния эле­мен­тов в  мас­си­ве на об­рат­ный и воз­вра­ща­ет пе­ре­упо­ря­до­чен­ный мас­сив
+    console.log(a.reverse().join()); //3,2,1
+    //sort() сор­ти­ру­ет эле­мен­ты в ис­ход­ном мас­си­ве и воз­вра­ща­ет от­сор­ти­ро­ван­ный мас­сив
+    var z = [33, 4, 1111, 222];
+    console.log(z.sort()); //[1111, 222, 33, 4]
+    //concat() соз­да­ет и воз­вра­ща­ет но­вый мас­сив, со­дер­жа­щий эле­мен­ты ис­ход­но­го мас­си­ва
+    console.log(z.concat(4, 5)); //[1111, 222, 33, 4, 4, 5]
+    console.log(z.concat(a)); //[1111, 222, 33, 4, 3, 2, 1]
+    //slice() воз­вра­ща­ет фраг­мент, или под­мас­сив, ука­зан­но­го мас­си­ва
+    console.log(z.slice(1,3)); //[222, 33]
+    console.log(z.slice(2)); //[33, 4]
+    //push() до­бав­ля­ет но­вый эле­мен­в в ко­нец мас­си­ва и воз­вра ща­ет его но­вую дли­ну.
+    //pop() – уда­ля­ет по­след­ний эле­мент мас­си­ва, умень­ша­ет дли­ну мас­си­ва и воз­вра­ща­ет уда­лен­ное им зна­че­ние.
+    console.info(z.push(58, 46)); //6 ([1111, 222, 33, 4, 58, 46])длимнна массива увеличилась
+    console.log(z.pop()); //46 Удален последний эллемент массива
+    //unshift() до­бав­ля­ет но­вый эле­мен­в в начало мас­си­ва и воз­вра ща­ет его но­вую дли­ну.
+    //shift() – уда­ля­ет первый эле­мент мас­си­ва, умень­ша­ет дли­ну мас­си­ва и воз­вра­ща­ет уда­лен­ное им зна­че­ние.
+    console.log(z.unshift(696, 717)); //7 ([696, 717, 1111, 222, 33, 4, 58]) длина массива увеличилась
+    console.log(z.shift()); //696 Удалил первый эллемент массива
+    //toString() - Превращает массив в строку
+    console.log(z.toString()); //717,1111,222,33,4,58 Строка
+    //forEach() вы­пол­ня­ет об­ход эле­мен­тов мас­си­ва и для ка­ж­до­го из них вы­зы­ва­ет ука­зан­ную функ­цию
+    var data = [1,2,3,4,5]; // Мас­сив, эле­мен­ты ко­то­ро­го бу­дут сум­ми­ро­вать­ся
+    // Най­ти сум­му эле­мен­тов мас­си­ва
+    var sum = 0; // На­чаль­ное зна­че­ние сум­мы 0
+    data.forEach(function(value) {
+        sum += value;
+    }); // При­ба­вить зна­че­ние к sum
+    console.log(sum); //15
+    // Уве­ли­чить все эле­мен­ты мас­си­ва на 1
+    data.forEach(function(v, i, a) {
+        a[i] = v + 1;
+    });
+    console.log(data); //[2,3,4,5,6]
+    //map() пе­ре­да­ет ука­зан­ной функ­ции ка­ж­дый эле­мент мас­си­ва, от­но­си­тель­но ко­то­ро­го он вы­зван,
+    //и воз­вра­ща­ет мас­сив зна­че­ний, воз­вра­щае­мых этой функ­ци­ей
+    console.log(z.map(function(x) { return x*x; })); //[514089, 1234321, 49284, 1089, 16, 3364]
+    //filter() воз­вра­ща­ет мас­сив, со­дер­жа­щий под­мно­же­ст­во эле­мен­тов ис­ход­но­го мас­си­ва.
+    console.log(z.filter(function(x) { return x < 35 })); //[33, 4]
+    //reduce() объ­еди­няет эле­мен­ты мас­си­ва
+    console.log(z); //[717, 1111, 222, 33, 4, 58]
+    console.log(z.reduce(function(sum, current) { //значенеи, позиция в массиве
+        return sum + current; //717+58
+    })); //2145 Сумма всех эллементов массива
+    //indexOf() - вы­пол­ня­ет по­иск от на­ча­ла мас­си­ва к кон­цу, а ме­тод
+    //lastIndexOf() – от кон­ца к на­ча­лу.
+    console.log(z.indexOf(33)); //3
+    console.log(z.lastIndexOf(1111)); //1
+*/
+
+    //Оты­ски­ва­ет все вхо­ж­де­ния зна­че­ния x в мас­сив и воз­вра­ща­ет мас­сив ин­дек­сов най­ден­ных сов­па­де­ний
+    function findall(a, x) {
+        var results = [5, 7, 45],    //Воз­вра­щае­мый мас­сив ин­дек­сов
+            len = a.length,      //Дли­на мас­си­ва, где вы­пол­ня­ет­ся по­иск
+            pos = 0;             //На­чаль­ная по­зи­ция по­ис­ка
+        while(pos < len) {           //По­ка ос­та­лись не­про­ве­рен­ные эле­мен­ты...
+            pos = a.indexOf(x, pos); //Ис­кать
+            if (pos === -1) break;   //Ес­ли ни­че­го не най­де­но, по­иск за­вер­шен.
+            results.push(pos);       //Ина­че - со­хра­нить ин­декс в мас­си­ве
+            pos = pos + 1;           //И про­дол­жить по­иск со сле­дую­ще­го эле­мен­та
+        }
+        return results;              //Вер­нуть мас­сив ин­дек­сов
+    }
+
+    //Заполнить массив нулями, кроме первого и последнего элементов, которые должны быть равны единице.
+    +function (item) {
+        let arr = [], count = item, i = 0, last = count - 1;
+        /*for (i; i < count; i++) {
+            (i == 0 || i == last) ? arr.push(1) : arr.push(0);
+        }*/
+        /*for (count; count--;) {
+            (count == 0 || count == last) ? arr.push(1) : arr.push(0);
+        }*/
+        while(count--) {
+            (count == 0 || count == last) ? arr.push(1) : arr.push(0);
+        }
+        clog(arr); //[1, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+    }(10);
+
+    //Заполнить массив нулями и единицами, при этом данные значения чередуются, начиная с нуля.
+    (function () {
+        let arr = [], count = 10;
+        while (count--) {
+            (count % 2) ? arr.push(0) : arr.push(1);
+        }
+        clog(arr); //[0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+    })();
+
+    //Заполнить массив последовательными нечетными числами, начиная с единицы.
+    !function (item) {
+        let arr = [], count = item;
+        while (count--) {
+            (count % 2) ? arr.unshift(count) : null;
+        }
+        //clog(arr.sort((a, b) => a - b)); //[1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+        //clog(arr.reverse()); //[1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+        clog(arr); //[1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+    }(20);
+
+    //Сформировать массив из элементов арифметической прогрессии с заданным первым элементом x и разностью d.
+    +function (count, after) {
+        let arr = [];
+        while (count -= after) {
+            arr.unshift(count);
+        }
+        clog(arr); //[2, 4, 6, 8, 10, 12, 14, 16, 18]
+    }(20, 2);
+
+    //Сформировать убывающий массив из чисел, которые делятся на 3.
+    !function (item) {
+        let arr = [];
+        while (item--) {
+            if (item % 3 == 0) {
+                arr.push(item);
+            }
+        }
+        clog(arr); //[9, 6, 3, 0]
+    }(10);
+
+    //Создать массив, на четных местах в котором стоят единицы, а на нечетных местах - числа,
+    //равные остатку от деления своего номера на 5.
+    (function (item) {
+        let arr = [];
+        while (item--) {
+            (item % 2 == 0) ? arr.unshift(1) : arr.unshift(item % 5);
+        }
+        clog(arr); //[1, 1, 1, 3, 1, 0, 1, 2, 1, 4]
+    })(10);
+
+    //Создать массив, состоящий из троек подряд идущих одинаковых элементов.
+    +function(item) {
+        let arr = [], i = 0, j;
+        for (i; i < item; i++) {
+            if (i % 3 == 0) {
+                j = []; //создаем пустой массив
+                arr.push(j); //вставляем массив в массив
+            }
+            //j.push(i); //формируем массив
+            j.push(3); //формируем массив
+        }
+        //dlog(arr); //[[0,1,2],[3,4,5][6,7,8]]
+        dlog(arr); //[[3,3,3],[3,3,3][3,3,3]]
+    }(9);
+
+    //Создать массив, который одинаково читается как слева направо, так и справа налево.
+    !function (item) {
+        let arr = [],
+            count = 0,
+            decrement = item % 2, //если число делиться на 2 то число не отнимаем при первом вызове 0--, иначе отнимаем от числа --0
+            part = Math.round(item / 2); //находим среднее значение и округляем его
+        while(item--) {
+            arr.push((item < part) ? (decrement ? count-- : --count) : count++);
+        }
+        //clog(arr); //15 [0, 1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2, 1, 0]
+        clog(arr); //10 [0, 1, 2, 3, 4, 4, 3, 2, 1, 0]
+    }(10);
+
+    //Заполните массив случайным образом нулями и единицами так, чтобы количество единиц было
+    //больше количества нулей.
+    function randOneZero(item) {
+        let arr = [], asunderLen, sum,
+            items = item; //сохраняем входящие данные в переменную, перезаписывая их для рекурсии
+        while (items--) {
+            arr.push(Math.round(Math.random() * 1));
+        }
+        sum = arr.reduce(function (a, b) {
+            return a + b;
+        }, 0);
+        asunderLen = Math.floor((arr.length / 2) - 1);
+        if (sum <= asunderLen) {
+            //clog(arr + ' ' + sum + ' ' + asunderLen);
+            return randOneZero(item);
+        } else {
+            //return arr + ' Сумма массива:' + sum + ' Массив пополам:' + asunderLen;
+            return arr;
+        }
+    }
+    clog(randOneZero(10)); //[0, 1, 1, 0, 1, 0, 1, 1, 1, 0]
+
+    //Заполните массив случайным образом нулями, единицами и двойками так, чтобы первая двойка
+    //в массиве встречалась раньше первой единицы, количество единиц было в точности равно суммарному
+    //количеству нулей и двоек.
+    function zeroTwoOneRand(item) {
+        let arr = [], zero = 0, one = 0, two = 0, items = item;
+        while (items--) {
+            if (items % 3 == 0) {
+                arr.push(2);
+                two += 1;
+            } else if (items % 2 == 0) {
+                arr.push(1);
+                one += 1;
+            } else {
+                arr.push(0);
+                zero += 1;
+            }
+        }
+        function addItems() { //если количество 0 1 2 не равно добавит
+            if (one < (two || zero)) {
+                arr.push(1);
+                one += 1;
+                addItems();
+            }
+            if (two < (one || zero)) {
+                arr.push(2);
+                two += 1;
+                addItems();
+            }
+            if (zero < (one || two)) {
+                arr.push(0);
+                zero += 1;
+                addItems();
+            }
+        }
+        function sortTwo(arr) { //сортировка массива пока не будет 2 первее чем 1 знак двойкой
+            arr.sort(function (a, b) {
+                return Math.random() - 0.5;
+            });
+            if ((arr[0] || arr[1] || arr[2] || arr[3]) == 1) {
+                return sortTwo(arr);
+            }
+            return arr;
+        }
+        addItems();
+        return sortTwo(arr);
+    }
+    clog(zeroTwoOneRand(7)); //[0, 2, 1, 2, 1, 1, 0, 2, 0]
+
+
+    //Определить, содержит ли массив данное число x
+    function findArr(arr, item) {
+        return arr.indexOf(item);
+    }
+    clog(findArr([1, 2, 5, 23, 'hello', true, 543, 6], true)); //5
+
+    //Найти количество четных чисел в массиве.
+    function chetCount(item) {
+        let len = item.length, arr = [];
+        /*while (len--) {
+            if (item[len] % 2 == 0) {
+                arr.push(item[len]);
+            }
+        }*/
+       /* var countMap = addArr1.map(function(count) { //применит функцию для обработки каждого эл масс
+            return count + 10;
+        });*/
+
+        /*item.map(function (elem, index, array) {
+            if (elem % 2 == 0) {
+                arr.push(elem);
+            }
+        });*/
+        item.reduce(function (sum, elem, index, array) {
+            if (elem % 2 == 0) {
+                arr.push(elem);
+            }
+        }, 0);
+
+        return arr.length + ' [' + arr + ']';
+    }
+    clog(chetCount([1,2,3,6,8,12,13,56,77, 44, 46])); //7 [2,6,8,12,56,44,46]
+
+    //Найти количество чисел в массиве, которые делятся на 3, но не делятся на 7.
+    function treeNotSeven(arr) {
+        let count = [];
+        arr.map(function (elem, index, array) {
+            if (elem % 3 === 0 && elem % 7 !== 0) {
+                count.push(elem);
+            }
+        });
+        return count.length + ' [' + count + ']';
+    }
+    clog(treeNotSeven([3,6,9,12,175,56,105,210,315,420])); //4 [3,6,9,12]
+
+    //Определите, каких чисел в массиве больше: которые делятся на первый элемент массива или
+    //которые делятся на последний элемент массива.
+    function divideOneLast(arr) {
+        let one = arr[0], last = arr[arr.length - 1], countOne = [], countLast = [], size;
+        arr.map(function (elem, index, array) {
+            if (elem % one == 0) {
+                countOne.push(elem);
+            }
+            if (elem % last == 0) {
+                countLast.push(elem);
+            }
+        });
+        size = (countOne.length > countLast.length) ? ' > ' : ' < ';
+        return 'Divide first:' + countOne + size + 'Divide last:' + countLast;
+    }
+    clog(divideOneLast([3,7,12,44,6,9,15,56,20,2,90,5])); //Divide first:3,12,6,9,15,90 > Divide last:15,20,90,5
+
+    //Найдите сумму чисел массива, которые расположены до первого четного числа массива.
+    function sumCountArray(arr) {
+        let divide = 0;
+        arr.map(function (elem, index, array) {
+            if (elem % 2 == 0) {
+                arr.length = 0; //обнуляем массив
+                elem = 0; //последнее значенеи не идет в сумму
+            }
+            divide += elem;
+        });
+        return divide;
+    }
+    clog(sumCountArray([1,3,5,7,8,9,10,20,18,28,32,36,11,4])); //16 [1,3,5,7] 8 четное
+
+    //Найдите сумму чисел массива, которые стоят на четных местах.
+    function sumArrEven(arr) {
+        let summ = 0;
+        arr.map(function (elem, index, allArr) {
+            if (index % 2 == 0) {
+                summ += elem;
+            }
+        });
+        return summ;
+    }
+    clog(sumArrEven([3,6,9,12,175,56,105,210,315,420,3,7,12,44,6,9,15,56,20,2,90,5])); //753
+
+    //В массиве заменить все числа, большие данного числа, на среднее арифметическое всех чисел массива.
+    function resizeBigArr(arr, item) {
+        let add = [], srCount = 0;
+        arr.map(function (elem, index, allArr) {
+            srCount += elem;
+        });
+        srCount = srCount / 2; //среднее значение эллемнетов
+        arr.reduce(function (sum, elem, index, allArr) {
+            if (elem > item) {
+                add.push(srCount);
+            } else {
+                add.push(elem);
+            }
+        });
+        return add;
+    }
+    clog(resizeBigArr([1,3,5,7,8,9,10,20,18,2,28,32,36,11,4], 7)); //[3, 5, 7, 97, 97, 97, 97, 97, 2, 97, 97, 97, 97, 4]
+
+    //Дан массив. Заменить все числа, меньшие последнего элемента массива, на первый элемент.
+    function resizeLastInFirst(arr) {
+        let first = arr[0], last = arr[arr.length - 1], add = [];
+        arr.map(function (elem, index, allArr) {
+            (elem < last) ? add.push(first) : add.push(elem);
+        });
+        return add;
+    }
+    clog(resizeLastInFirst([73,3,5,7,8,9,10,20,18,2,28,32,36,11,19])); //[73, 73, 73, 73, 73, 73, 73, 20, 73, 73, 28, 32, 36, 73, 19]
+
+    //Поменять местами наибольший и наименьший элементы массива.
+    function addBigLessArr(arr) {
+        let bigger, less, AllArr = [], sortArr;
+        arr.map(function (elem, index, allArr) { //копируем массив
+            AllArr.push(elem);
+        });
+        sortArr = arr.sort(function (a, b) { //сортируем входящий массив
+            return a - b;
+        });
+        bigger = sortArr[sortArr.length - 1]; //наибольшее значение
+        less = sortArr[0]; //наименьшее значение
+        AllArr[AllArr.indexOf(less)] = bigger; //находим в скопированном массиве меньшее значение и меняем на большее
+        AllArr[AllArr.indexOf(bigger)] = less; //большее на меньшее
+        return AllArr;
+    }
+    clog(addBigLessArr([73,3,5,7,8,9,10,20,18,2,28,32,36,11,19])); //[2, 3, 5, 7, 8, 9, 10, 20, 18, 73, 28, 32, 36, 11, 19]
+
+    //Найти наибольший четный элемент массива и поменять его местами с наименьшим нечетным элементом.
+    //Если одного из таких элементов нет, то всем элементам массива присвоить значение, равное нулю.
+    function biggerDoubleElem(arr) {
+        let chet = [], nechet = [];
+        arr.map(function (elem, index, allArr) {
+            (elem % 2 == 0) ? chet.push(elem) : nechet.push(elem);
+        });
+        chet.sort(function (a, b) { return a - b; });
+        nechet.sort(function (a, b) { return a - b; });
+        arr[arr.indexOf(chet[chet.length - 1])] = nechet[0]; //3
+        arr[arr.indexOf(nechet[0])] = chet[chet.length - 1]; //36
+        return arr;
+    }
+    clog(biggerDoubleElem([73,3,5,7,8,9,10,20,18,2,28,32,36,11,19])); //[73, 36, 5, 7, 8, 9, 10, 20, 18, 2, 28, 32, 3, 11, 19]
+
+    //Заменить каждый элемент массива с четным номером на соседний слева элемент.
+    function chetLeft(arr) {
+        let chet = [];
+        arr.map(function (elem, index, allArr) {
+            if (elem % 2 == 0) {
+                chet.push(chet[chet.length - 1]);
+            } else {
+                chet.push(elem);
+            }
+        });
+        return chet;
+    }
+    clog(chetLeft([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])); //[1, 1, 3, 3, 5, 5, 7, 7, 9, 9, 11, 11, 13, 13, 15]
+
+    //Удалить в массиве все числа, которые повторяются более двух раз.
+    function countDouble(arr) {
+        let count = [];
+        arr.sort(function (a, b) { //сортируем входящие данные
+            return a - b;
+        });
+        arr.map(function (elem, index, allArr) {
+            if (elem != count[count.length - 2]) { //если елемент массива не совпадает с добавленным 2 эллементом с конца
+                count.push(elem);
+            }
+        });
+        return count;
+    }
+    clog(countDouble([1,1,1,55,55,55,2,2,2,2,55,3,7,7,3,4,4,7,4,4,8,4,5,5,9,5,5,5,5,6,7,8,8,8,9,9,9,9,9])); //[1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 7, 7, 8, 8, 9, 9, 55, 55]
+
+    //Дан массив ['1', '2', '3', '4', '5', '6']. Сделайте из него строку '16-25-34'. Массив, конечно же, может быть любым.
+    function arrFirstLast(arr) {
+        var str = '';
+        function arrPlus(arr) {
+            let len = arr.length;
+            if (len) {
+                str += (len > 1) ? arr.shift() : '';
+                str += arr.pop();
+                str += (len > 2) ? '-' : '';
+                arrPlus(arr);
+            }
+            return str;
+        }
+        return arrPlus(arr);
+    }
+    clog(arrFirstLast(['1', '2', '3', '4', '5', '6'])); //'16-25-34'
+    clog(arrFirstLast(['1', '2', '3', '4', '5', '6', '7'])); //'17-26-35-4'
+
+    //Дан массив с числами. Подсчитайте количество цифр 3 в данном массиве. Пример:
+    //[13, 35, 3, 443] - в массиве 4 цифры 3.
+    function countThree(arr) {
+        let count = 0, allArr = arr.join(''), len = allArr.length;
+        for (len; len--;) {
+            if (allArr.charAt(len) == '3') {
+                count ++;
+            }
+        }
+        return count;
+        /*var count = 0;
+         for (let el of arr) {
+         for (let letter of el.toString()) {
+         if (letter == 3) {
+             count++;
+                 }
+             }
+         }
+         return count;*/
+    }
+    clog(countThree([13, 35, 3, 443, 33, 333])); //9
+    clog(countThree([13, 35, 3, 443, 33, 553])); //7
+
+
+
+
+
+
+
+
+
+
+
+
+    //Напишите функцию aclean(arr) , которая возвращает массив слов, очищенный от анаграмм.
+    function aclean(arr) {
+        // этот объект будем использовать для уникальности
+        var obj = {}, result = [];
+        for (var i = 0; i < arr.length; i++) {
+            // разбить строку на буквы, отсортировать и слить обратно
+            var sorted = arr[i].toLowerCase().split('').sort().join('');
+            obj[sorted] = arr[i]; // сохраняет только одно значение с таким ключом
+        }
+        // теперь в obj находится для каждого ключа ровно одно значение
+        for (var key in obj) result.push(obj[key]);
+        return result;
+    }
+    var arrAnagramm = ["воз", "киборг", "корсет", "ЗОВ", "гробик", "костер", "сектор"];
+    clog( aclean(arrAnagramm) ); // "воз,киборг,корсет" или "ЗОВ,гробик,сектор
+
+    //сложить все вложенные массивы
+    function subArr(arr) {
+        var count = 0;
+        manyArr(arr);
+        function manyArr(arr) {
+            for (var i = 0; i < arr.length; i++) {
+                if (Array.isArray(arr[i])) {
+                    manyArr(arr[i]);
+                } else {
+                    count += arr[i];
+                }
+            }
+        }
+        return count;
+    }
+    console.log(subArr([1, 2, [3, 4, [5, 6], 7], 8, [9, 10]])); //55
+
+    //сложить 3 числа массива добавивив их сумму опеределенное количество раз
+    /*function tribonacci(signature, n) {
+        function nextCount(signature) {
+            return signature.reduce(function (elem, index) {
+                return elem + index;
+            });
+        }
+
+        if (n < 3) {
+            return signature.splice(0, n);
+        }
+        var countArr = [],
+            count = [];
+        for (var i = 3; i < n; i++) {
+            if (i === 3) {
+                countArr = signature;
+                countArr.push(nextCount(countArr));
+            } else {
+                count.push(countArr.shift());
+                countArr.push(nextCount(countArr));
+            }
+        }
+        return count.concat(countArr);
+    }*/
+    function tribonacci(sign,n){
+        for (var i = 3; i < n; i++) {
+            sign[i] = sign[i-1] + sign[i-2] + sign[i-3];
+        }
+        return sign.slice(0, n);
+    }
+    console.log(tribonacci([1,1,1],10)); //[1,1,1,3,5,9,17,31,57,105]
+    console.log(tribonacci([0,0,1],10)); //[0,0,1,1,2,4,7,13,24,44]
+    console.log(tribonacci([0,1,1],10)); //[0,1,1,2,4,7,13,24,44,81]
+    console.log(tribonacci([1,0,0],10)); //[1,0,0,1,1,2,4,7,13,24]
+    console.log(tribonacci([0,0,0],10)); //[0,0,0,0,0,0,0,0,0,0]
+    console.log(tribonacci([1,2,3],10)); //[1,2,3,6,11,20,37,68,125,230]
+    console.log(tribonacci([3,2,1],10)); //[3,2,1,6,9,16,31,56,103,190]
+    console.log(tribonacci([1,1,1],1)); //[1]
+    console.log(tribonacci([300,200,100],0)); //[]
+    console.log(tribonacci([0.5,0.5,0.5],30)); //[0.5,0.5,0.5,1.5,2.5,4.5,8.5,15.5,28.5,52.5,96.5,177.5,326.5,600.5,1104.5,2031.5,3736.5,6872.5,12640.5,23249.5,42762.5,78652.5,144664.5,266079.5,489396.5,900140.5,1655616.5,3045153.5,5600910.5,10301680.5]
+
+</script>
+</body>
+</html>
